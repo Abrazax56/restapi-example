@@ -1,0 +1,36 @@
+{
+  "name": "restful_api_bunjs",
+  "version": "20.21.22",
+  "description": "a simple restful api using bunjs and typescript",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm i -g bun && bun run ./api/index.ts",
+    "test": "jest"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.[t|j]sx?$": "babel-jest"
+    }
+  },
+  "type": "module",
+  "devDependencies": {
+    "@babel/preset-env": "latest",
+    "@babel/preset-typescript": "latest",
+    "@jest/globals": "latest",
+    "@types/cors": "latest",
+    "@types/express": "latest",
+    "@types/jest": "latest",
+    "babel-jest": "latest",
+    "bun-types": "latest",
+    "jest": "latest",
+    "ts-jest": "latest",
+    "typescript": "latest"
+  },
+  "dependencies": {
+    "cors": "latest",
+    "express": "latest",
+    "mongodb": "latest"
+  },
+  "author": "Ahmad Beni Rusli",
+  "license": "MIT"
+}
