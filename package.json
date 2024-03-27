@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "cors": "latest",
+    "dotenv": "latest",
     "express": "latest",
     "mongodb": "latest"
   },
