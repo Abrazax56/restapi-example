@@ -8,7 +8,7 @@ export class TiktokDl {
             .then(respons => respons.json())
             .then(respons => respons)
             .catch(error => {
-            throw new Error("url or server is wrong");
+            throw new Error(error);
         });
     }
 }
