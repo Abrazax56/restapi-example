@@ -1,4 +1,4 @@
-import { Persons } from '.././class/Person';
+import { Persons } from '.././src/Person';
 import { Person } from '.././types/person';
 
 describe('Class test', function () {

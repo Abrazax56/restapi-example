@@ -1,11 +1,12 @@
 import express, { Application, Request, Response, NextFunction } from "express";
 import cors from 'cors';
 import { Person } from '.././types/person';
-import { Persons } from '.././class/Person';
+import { Persons } from '.././src/Person';
+import { TiktokDl } from '.././src/downloader/tiktok';
 import 'dotenv/config';
 
 const app: Application = express();
-const port: number = process.env.PORT || 8080;
+const port: any = process.env.PORT || 8080;
 
 app.use(cors());
 
@@ -33,6 +34,14 @@ app.get('/', (req: Request, res: Response) => {
   res.json(persons.person);
 });
 
-app.listen(port, '0.0.0.0', () => {
+app.get('/tiktokdl', async(req: Request, res: Response) => {
+  const url: any = req.query.url || '';
+  if (!url) return res.json({error: 'invalid url'});
+  
+  const result = new TiktokDl<string>(url);
+  res.json(await result.download());
+})
+
+app.listen(port, '0.0.0.0', (): void => {
   console.info('app is listening...');
 })
