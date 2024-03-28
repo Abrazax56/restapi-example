@@ -6,6 +6,9 @@ import 'dotenv/config';
 const app = express();
 const port = process.env.PORT || 8080;
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded());
+app.set('json spaces', 2);
 app.get('/', (req, res) => {
     const persons = new Persons({
         name: "Ahmad",
@@ -33,8 +36,15 @@ app.get('/tiktokdl', async (req, res) => {
     const url = req.query.url || '';
     if (!url)
         return res.json({ error: 'invalid url' });
-    const result = new TiktokDl(url);
-    res.json(await result.download());
+    try {
+        const result = new TiktokDl(url);
+        res.json(await result.download());
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            res.json({ error: error.message });
+        }
+    }
 });
 app.listen(port, '0.0.0.0', () => {
     console.info('app is listening...');
