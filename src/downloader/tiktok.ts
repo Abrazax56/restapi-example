@@ -7,5 +7,8 @@ export class TiktokDl<Type> {
     return await fetch('https://tikdldtapi.vercel.app/download/json?url=' + this.url)
     .then(respons => respons.json())
     .then(respons => respons)
+    .catch(error => {
+      throw new Error("url or server is wrong")
+    });
   }
 }

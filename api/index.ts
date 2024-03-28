@@ -9,6 +9,9 @@ const app: Application = express();
 const port: any = process.env.PORT || 8080;
 
 app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded());
+app.set('json spaces', 2)
 
 app.get('/', (req: Request, res: Response) => {
   const persons = new Persons<Person>({
@@ -37,9 +40,14 @@ app.get('/', (req: Request, res: Response) => {
 app.get('/tiktokdl', async(req: Request, res: Response) => {
   const url: any = req.query.url || '';
   if (!url) return res.json({error: 'invalid url'});
-  
-  const result = new TiktokDl<string>(url);
-  res.json(await result.download());
+  try {
+    const result = new TiktokDl<string>(url);
+    res.json(await result.download());
+  } catch (error) {
+    if(error instanceof Error) {
+      res.json({error: error.message});
+    }
+  }
 })
 
 app.listen(port, '0.0.0.0', (): void => {
