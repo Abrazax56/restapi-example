@@ -1,5 +1,6 @@
 import express, { Application, Request, Response } from 'express';
 import cors from 'cors';
+import { UserRouter } from '.././Routers/UserRouters';
 
 export const web: Application = express();
 web.use(cors());
@@ -10,6 +11,8 @@ web.set('json spaces', 2);
 web.get('/', (req: Request, res: Response) => {
   res.json({status: true});
 });
+
+web.use(UserRouter);
 
 web.use('/', (req: Request, res: Response) => {
   res.status(404).json({status: 404, message: 'not found'});
