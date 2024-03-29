@@ -47,7 +47,7 @@ app.get('/tiktokdl', async (req, res) => {
         }
     }
 });
-app.get('quran/:opsi', async (req, res) => {
+app.get('/quran/:opsi', async (req, res) => {
     try {
         switch (req.params.opsi) {
             case 'listsurah':
