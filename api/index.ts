@@ -52,9 +52,9 @@ app.get('/tiktokdl', async(req: Request, res: Response) => {
 });
 
 app.get('/quran/:opsi', async(req: Request, res: Response) => {
+  const parameters: string | undefined = req.params.opsi || undefined;
+  if(!parameters) return res.json({error: "undefined params"});
   try {
-    const parameters: string | undefined = req.params.opsi || undefined;
-    if(!parameters) return res.json({error: "undefined params"})
     switch (parameters) {
       case 'listsurah':
         await Database.CLIENT.connect();
