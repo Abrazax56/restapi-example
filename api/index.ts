@@ -3,6 +3,7 @@ import cors from 'cors';
 import { Person } from '.././types/person';
 import { Persons } from '.././src/Person';
 import { TiktokDl } from '.././src/downloader/tiktok';
+import { Database } from '.././database/mongo';
 import 'dotenv/config';
 
 const app: Application = express();
@@ -48,7 +49,27 @@ app.get('/tiktokdl', async(req: Request, res: Response) => {
       res.json({error: error.message});
     }
   }
-})
+});
+
+app.get('quran/:opsi', async(req: Request, res: Response) => {
+  try {
+    switch (req.params.opsi) {
+      case 'listsurah':
+        await Database.CLIENT.connect();
+        const list: any = await Database.LISTSURAH.find();
+        const data = list.toArray((error: any, result: any): Array<any> => result);
+        res.json(data);
+        break;
+      default:
+        res.json({error: 'invalid params'})
+        break;
+    }
+  } catch (error) {
+    res.json({error})
+  } finally {
+    await Database.CLIENT.close();
+  }
+});
 
 app.listen(port, '0.0.0.0', (): void => {
   console.info('app is listening...');

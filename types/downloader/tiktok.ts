@@ -20,6 +20,6 @@ export interface Result {
 }
 
 export interface Tiktok {
-  status: string;
-  result: Result;
+  status?: string;
+  result?: Result;
 }
