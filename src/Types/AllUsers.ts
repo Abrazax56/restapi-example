@@ -8,8 +8,13 @@ export interface User {
 export interface AllUser {
   [index: number]: User;
 }
+export interface RecentRead {
+  nomor: number;
+  ayah: number;
+}
 export interface UserInfo {
   name: string;
   username: string;
   password: string;
+  recentread?: RecentRead;
 }
