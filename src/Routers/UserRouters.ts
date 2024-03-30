@@ -18,7 +18,7 @@ UserRouter.get('/users', async(req: Request, res: Response) => {
   }
 });
 
-UserRouter.route('/user/:loginout')
+UserRouter.route('/user')
 
 .get(async(req: Request, res: Response) => {
   try {
@@ -52,9 +52,9 @@ UserRouter.route('/user/:loginout')
   } catch (error) {
     res.json(error);
   }
-})
+});
 
-.put(async(req: Request, res: Response) => {
+UserRouter.put('/user/:loginout', async(req: Request, res: Response) => {
   try {
     const userData: UserInfo = (req.body.userData) as UserInfo;
     switch (req.params.loginout) {

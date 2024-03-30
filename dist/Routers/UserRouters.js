@@ -15,7 +15,7 @@ UserRouter.get('/users', async (req, res) => {
         res.json(error);
     }
 });
-UserRouter.route('/user/:loginout')
+UserRouter.route('/user')
     .get(async (req, res) => {
     try {
         const user = new GetUser(req.query.user_token);
@@ -49,8 +49,8 @@ UserRouter.route('/user/:loginout')
     catch (error) {
         res.json(error);
     }
-})
-    .put(async (req, res) => {
+});
+UserRouter.put('/user/:loginout', async (req, res) => {
     try {
         const userData = (req.body.userData);
         switch (req.params.loginout) {
