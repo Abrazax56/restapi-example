@@ -61,10 +61,12 @@ UserRouter.put('/user/:loginout', async(req: Request, res: Response) => {
       case 'login':
         const loginUser = new LogInOutUser<UserInfo, boolean>(userData, true);
         await loginUser.loginout();
+        res.json({status: 'success'})
         break;
       case 'logout':
         const logoutUser = new LogInOutUser<UserInfo, boolean>(userData, false);
         await logoutUser.loginout();
+        res.json({status: 'success'})
         break;
       case 'update':
         const updatedUser: UserInfo = (req.body.updatedUser) as UserInfo;
