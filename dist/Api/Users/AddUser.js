@@ -12,7 +12,7 @@ export class AddUser {
             const user_token = sign(this.newUser, secret);
             const isuser = {
                 user_token,
-                loggingin: false
+                logingin: false
             };
             await UserDB.COLLECTION.insertOne(isuser);
         }
