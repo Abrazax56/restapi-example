@@ -14,8 +14,11 @@ QuranRouter.get('/surah', async (req, res) => {
 QuranRouter.get('/surah/:id', async (req, res) => {
     try {
         const nomor = Number(req.params.id);
-        const getDetail = await DetailSurah.getDetail(nomor);
-        res.json(getDetail);
+        if (nomor > 0 && nomor <= 114) {
+            const getDetail = await DetailSurah.getDetail(nomor);
+            return res.json(getDetail);
+        }
+        res.json({ status: null, message: "invalid params" });
     }
     catch (error) {
         res.json(error);
