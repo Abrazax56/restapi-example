@@ -4,7 +4,7 @@ export class ListSurah {
         try {
             await ListSurahDB.CLIENT.connect();
             const data = await ListSurahDB.COLLECTION.find().toArray();
-            return data;
+            return data.sort((a, b) => a.nomor - b.nomor);
         }
         catch (error) {
             if (error instanceof Error) {
