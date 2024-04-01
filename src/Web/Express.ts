@@ -10,7 +10,8 @@ const allowedOrigins: Array<string> = [
   'https://alquranqu.vercel.app',
   'https://alquranqu.my.id',
   'https://reqbin.com',
-  'http://localhost:8158'
+  'http://localhost:8158',
+  'http://localhost:5173'
 ];
 const options: cors.CorsOptions = {
   origin: allowedOrigins
