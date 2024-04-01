@@ -3,7 +3,18 @@ import cors from 'cors';
 import { UserRouter } from '.././Routers/UserRouters';
 import { QuranRouter } from '.././Routers/QuranRouters';
 export const web = express();
-web.use(cors());
+const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:8080',
+    'https://alquranqu.vercel.app',
+    'https://alquranqu.my.id',
+    'https://reqbin.com',
+    'http://localhost:8158'
+];
+const options = {
+    origin: allowedOrigins
+};
+web.use(cors(options));
 web.use(express.json());
 web.use(express.urlencoded());
 web.set('json spaces', 2);
