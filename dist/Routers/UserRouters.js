@@ -1,10 +1,8 @@
 import express from 'express';
 import { GetAllUsers } from '.././Api/Users/GetAllUsers';
-import { GetUser } from '.././Api/Users/GetUser';
-import { AddUser } from '.././Api/Users/AddUser';
-import { DeleteUser } from '.././Api/Users/DeleteUser';
-import { UpdateUser } from '.././Api/Users/UpdateUser';
-import { LogInOutUser } from '.././Api/Users/LogInOutUser';
+import { Register } from '.././Api/Users/Register';
+import { Delete } from '.././Api/Users/Delete';
+import { Login } from '.././Api/Users/Login';
 export const UserRouter = express.Router();
 UserRouter.get('/users', async (req, res) => {
     try {
@@ -16,63 +14,59 @@ UserRouter.get('/users', async (req, res) => {
     }
 });
 UserRouter.route('/user')
-    .get(async (req, res) => {
-    try {
-        const user = new GetUser(req.query.user_token);
-        const getUser = await user.user();
-        res.json(getUser);
-    }
-    catch (error) {
-        res.json({ status: 404, message: 'not found' });
-    }
-})
     .post(async (req, res) => {
     try {
-        const addUser = new AddUser({
+        const userData = {
             name: req.body.name,
             username: req.body.username,
-            password: req.body.password
+            password: req.body.password,
+            loggingin: false,
+            recentread: false
+        };
+        const register = new Register(userData);
+        await register.register();
+        res.json({
+            status: 200,
+            message: "register successfully"
         });
-        await addUser.user();
-        res.json({ status: 'success' });
     }
     catch (error) {
-        res.json({ status: 500 });
+        res.json(error);
     }
 })
     .delete(async (req, res) => {
     try {
-        const deleteUser = new DeleteUser(req.query.user_token);
-        await deleteUser.user();
-        res.json({ status: "success" });
+        const userToken = (req.query.token);
+        const deleteUser = new Delete(userToken);
+        await deleteUser.deleteUser();
+        res.json({
+            status: 200,
+            message: 'user successfully deleted'
+        });
     }
     catch (error) {
         res.json(error);
     }
 });
-UserRouter.put('/user/:loginout', async (req, res) => {
-    try {
-        const userData = (req.body.userData);
-        switch (req.params.loginout) {
-            case 'login':
-                const loginUser = new LogInOutUser(userData, true);
-                await loginUser.loginout();
-                res.json({ status: 'success' });
-                break;
-            case 'logout':
-                const logoutUser = new LogInOutUser(userData, false);
-                await logoutUser.loginout();
-                res.json({ status: 'success' });
-                break;
-            case 'update':
-                const updatedUser = (req.body.updatedUser);
-                const updateUser = new UpdateUser(userData, updatedUser);
-                await updateUser.update();
-                res.json({ status: 'success' });
-                break;
-        }
-    }
-    catch (error) {
-        res.json(error);
+UserRouter.put('/user/:options', async (req, res) => {
+    switch (req.params.options) {
+        case 'login':
+            const loggingin = new Login({
+                username: req.body.username,
+                password: req.body.password
+            });
+            const token = await loggingin.login();
+            res.json({
+                status: 200,
+                message: "successfully login",
+                token,
+            });
+            break;
+        case 'logout':
+            res.json({ status: 404 });
+            break;
+        case 'update':
+            res.json({ status: 404 });
+            break;
     }
 });

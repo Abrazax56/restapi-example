@@ -1,13 +1,14 @@
 import { UserDB } from '../.././Database/UserDB';
+import { User } from '../.././Types/Users';
 
-export class DeleteUser<Type> {
+export class Register<Type extends User> {
   constructor(
-    private user_token: Type
+    private userData: Type
   ) {}
-  async user(): Promise<void> {
+  async register(): Promise<void>{
     try {
       await UserDB.CLIENT.connect();
-      await UserDB.COLLECTION.deleteOne({user_token: this.user_token});
+      await UserDB.COLLECTION.insertOne(this.userData);
     } catch (error) {
       if(error instanceof Error) {
         throw new Error(error.message);

@@ -1,5 +1,5 @@
 import { UserDB } from '../.././Database/UserDB';
-import { AllUser } from '../.././Types/AllUsers';
+import { AllUser } from '../.././Types/Users';
 
 export class GetAllUsers {
   static async USERS(): Promise<AllUser> {

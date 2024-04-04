@@ -1,20 +1,27 @@
 import { ObjectId } from 'mongodb';
 
+export interface RecentRead {
+  nomor?: number;
+  nama?: string;
+  nama_latin?: string;
+  ayat?: number;
+}
+
 export interface User {
   _id?: ObjectId;
-  user_token?: string;
+  name?: string;
+  username?: string;
+  password?: string;
+  recentread?: boolean | RecentRead;
   loggingin?: boolean;
 }
 export interface AllUser {
   [index: number]: User;
 }
-export interface RecentRead {
-  nomor: number;
-  ayah: number;
-}
+
 export interface UserInfo {
   name: string;
   username: string;
   password: string;
-  recentread?: RecentRead;
+  recentread?: boolean | RecentRead;
 }

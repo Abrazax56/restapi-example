@@ -20,7 +20,7 @@
     "@types/cors": "latest",
     "@types/express": "latest",
     "@types/jest": "latest",
-    "@types/jwt-encode": "latest",
+    "@types/jsonwebtoken": "latest",
     "babel-jest": "latest",
     "bun-types": "latest",
     "jest": "latest",
@@ -31,7 +31,7 @@
     "cors": "latest",
     "dotenv": "latest",
     "express": "latest",
-    "jwt-encode": "latest",
+    "jsonwebtoken": "latest",
     "mongodb": "latest"
   },
   "author": "Ahmad Beni Rusli",
