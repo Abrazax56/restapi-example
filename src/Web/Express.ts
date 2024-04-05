@@ -28,8 +28,7 @@ web.use((req: Request, res: Response, next: NextFunction) => {
     message: 'authorization required!'
   });
   const authToken: string = req.headers.authorization;
-  const verify: User = jwt.verify(authToken, (process.env.SECRET) as Secret) as User;
-  if(verify instanceof jwt.TokenExpiredError) {
+  if(authToken !== process.env.SECRET) {
     return res.status(401).json({
       message: 'unauthorized!'
     })

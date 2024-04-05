@@ -1,6 +1,5 @@
 import express from 'express';
 import cors from 'cors';
-import jwt from 'jsonwebtoken';
 import 'dotenv/config';
 import { UserRouter } from '.././Routers/UserRouters';
 import { QuranRouter } from '.././Routers/QuranRouters';
@@ -26,8 +25,7 @@ web.use((req, res, next) => {
             message: 'authorization required!'
         });
     const authToken = req.headers.authorization;
-    const verify = jwt.verify(authToken, (process.env.SECRET));
-    if (verify instanceof jwt.TokenExpiredError) {
+    if (authToken !== process.env.SECRET) {
         return res.status(401).json({
             message: 'unauthorized!'
         });
