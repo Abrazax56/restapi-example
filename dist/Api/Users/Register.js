@@ -7,7 +7,10 @@ export class Register {
     async register() {
         try {
             await UserDB.CLIENT.connect();
-            await UserDB.COLLECTION.insertOne(this.userData);
+            const user = await UserDB.COLLECTION.findOne({ username: this.userData.username });
+            if (user === null) {
+                await UserDB.COLLECTION.insertOne(this.userData);
+            }
         }
         catch (error) {
             if (error instanceof Error) {

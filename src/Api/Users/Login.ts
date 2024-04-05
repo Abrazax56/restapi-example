@@ -35,6 +35,8 @@ export class Login<Type extends User> {
         throw new Error(error.message);
         return error as string;
       }
+    } finally {
+      await UserDB.CLIENT.close();
     }
   }
 }

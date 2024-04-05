@@ -32,5 +32,8 @@ export class Login {
                 return error;
             }
         }
+        finally {
+            await UserDB.CLIENT.close();
+        }
     }
 }

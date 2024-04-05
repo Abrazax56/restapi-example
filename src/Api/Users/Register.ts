@@ -8,7 +8,10 @@ export class Register<Type extends User> {
   async register(): Promise<void>{
     try {
       await UserDB.CLIENT.connect();
-      await UserDB.COLLECTION.insertOne(this.userData);
+      const user: User | null = await UserDB.COLLECTION.findOne({username: this.userData.username});
+      if(user === null) {
+        await UserDB.COLLECTION.insertOne(this.userData);
+      }
     } catch (error) {
       if(error instanceof Error) {
         throw new Error(error.message);
