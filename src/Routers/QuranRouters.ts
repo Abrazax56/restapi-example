@@ -11,7 +11,7 @@ QuranRouter.get('/surah', async(req: Request, res: Response) => {
     const getList: ListSurahs = await ListSurah.getList();
     res.json(getList);
   } catch (error) {
-    res.json(error);
+    res.status(500).json(error);
   }
 });
 
@@ -24,6 +24,6 @@ QuranRouter.get('/surah/:id', async(req: Request, res: Response) => {
     }
     res.json({status: null, message: "invalid params"});
   } catch (error) {
-    res.json(error);
+    res.status(500).json(error);
   }
 });

@@ -22,15 +22,13 @@ web.use(express.json());
 web.use(express.urlencoded());
 web.use((req, res, next) => {
     if (!req.headers.authorization)
-        return res.json({
-            status: 403,
+        return res.status(403).json({
             message: 'authorization required!'
         });
     const authToken = req.headers.authorization;
     const verify = jwt.verify(authToken, (process.env.SECRET));
     if (verify instanceof jwt.TokenExpiredError) {
-        return res.json({
-            status: 401,
+        return res.status(401).json({
             message: 'unauthorized!'
         });
     }

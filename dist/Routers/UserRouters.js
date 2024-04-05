@@ -12,7 +12,7 @@ UserRouter.get('/users', async (req, res) => {
         res.json(data);
     }
     catch (error) {
-        res.json({ error });
+        res.status(500).json({ error });
     }
 });
 UserRouter.route('/user')
@@ -33,7 +33,7 @@ UserRouter.route('/user')
         });
     }
     catch (error) {
-        res.json({ error });
+        res.status(500).json({ error });
     }
 })
     .delete(async (req, res) => {
@@ -47,7 +47,7 @@ UserRouter.route('/user')
         });
     }
     catch (error) {
-        res.json({ error });
+        res.status(500).json({ error });
     }
 });
 UserRouter.put('/user/:options', async (req, res) => {
@@ -89,6 +89,6 @@ UserRouter.put('/user/:options', async (req, res) => {
         }
     }
     catch (error) {
-        res.json({ error });
+        res.status(500).json({ error });
     }
 });

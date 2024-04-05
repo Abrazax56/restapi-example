@@ -14,7 +14,7 @@ UserRouter.get('/users', async(req: Request, res: Response) => {
     const data: AllUser = await GetAllUsers.USERS() as AllUser;
     res.json(data);
   } catch (error) {
-    res.json({error});
+    res.status(500).json({error});
   }
 });
 
@@ -36,7 +36,7 @@ UserRouter.route('/user')
       message: "register successfully"
     });
   } catch (error) {
-    res.json({error});
+    res.status(500).json({error});
   }
 })
 
@@ -50,7 +50,7 @@ UserRouter.route('/user')
       message: 'user successfully deleted'
     });
   } catch (error) {
-    res.json({error});
+    res.status(500).json({error});
   }
 });
 
@@ -92,6 +92,6 @@ UserRouter.put('/user/:options', async(req: Request, res: Response) => {
         break;
     }
   } catch(error) {
-    res.json({error});
+    res.status(500).json({error});
   }
 });

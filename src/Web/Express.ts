@@ -24,15 +24,13 @@ web.use(express.json());
 web.use(express.urlencoded());
 
 web.use((req: Request, res: Response, next: NextFunction) => {
-  if(!req.headers.authorization) return res.json({
-    status: 403,
+  if(!req.headers.authorization) return res.status(403).json({
     message: 'authorization required!'
   });
   const authToken: string = req.headers.authorization;
   const verify: User = jwt.verify(authToken, (process.env.SECRET) as Secret) as User;
   if(verify instanceof jwt.TokenExpiredError) {
-    return res.json({
-      status: 401,
+    return res.status(401).json({
       message: 'unauthorized!'
     })
   }
