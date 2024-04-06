@@ -9,7 +9,7 @@ export const UserRouter = express.Router();
 UserRouter.get('/users', async (req, res) => {
     try {
         const data = await GetAllUsers.USERS();
-        res.json(data);
+        res.status(200).json(data);
     }
     catch (error) {
         res.status(500).json({ error });
@@ -27,7 +27,7 @@ UserRouter.route('/user')
         };
         const register = new Register(userData);
         await register.register();
-        res.json({
+        res.status(200).json({
             status: 200,
             message: "register successfully"
         });
@@ -38,10 +38,10 @@ UserRouter.route('/user')
 })
     .delete(async (req, res) => {
     try {
-        const userToken = (req.query.token);
+        const userToken = (req.headers.userauth);
         const deleteUser = new Delete(userToken);
         await deleteUser.deleteUser();
-        res.json({
+        res.status(200).json({
             status: 200,
             message: 'user successfully deleted'
         });
@@ -59,29 +59,29 @@ UserRouter.put('/user/:options', async (req, res) => {
                     password: req.body.password
                 });
                 const token = await loggingin.login();
-                res.json({
+                res.status(200).json({
                     status: 200,
                     message: "successfully login",
                     token,
                 });
                 break;
             case 'logout':
-                const loggingout = new Logout(req.body.token);
+                const loggingout = new Logout((req.headers.userauth));
                 await loggingout.logout();
-                res.json({
+                res.status(200).json({
                     status: 200,
                     message: 'logout successfully'
                 });
                 break;
             case 'update':
-                const update = new Update(req.body.token, {
+                const update = new Update((req.headers.userauth), {
                     nomor: req.body.nomor,
                     nama: req.body.nama,
                     nama_latin: req.body.nama_latin,
                     ayat: req.body.ayat
                 });
                 await update.update();
-                res.json({
+                res.status(200).json({
                     status: 200,
                     message: 'update successfully'
                 });

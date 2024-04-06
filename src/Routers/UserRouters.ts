@@ -12,7 +12,7 @@ export const UserRouter = express.Router();
 UserRouter.get('/users', async(req: Request, res: Response) => {
   try {
     const data: AllUser = await GetAllUsers.USERS() as AllUser;
-    res.json(data);
+    res.status(200).json(data);
   } catch (error) {
     res.status(500).json({error});
   }
@@ -31,7 +31,7 @@ UserRouter.route('/user')
     };
     const register = new Register<User>(userData);
     await register.register();
-    res.json({
+    res.status(200).json({
       status: 200,
       message: "register successfully"
     });
@@ -42,10 +42,10 @@ UserRouter.route('/user')
 
 .delete(async(req: Request, res: Response) => {
   try {
-    const userToken: string = (req.query.token) as string;
+    const userToken: string = (req.headers.userauth) as string;
     const deleteUser = new Delete<string>(userToken);
     await deleteUser.deleteUser();
-    res.json({
+    res.status(200).json({
       status: 200,
       message: 'user successfully deleted'
     });
@@ -63,29 +63,29 @@ UserRouter.put('/user/:options', async(req: Request, res: Response) => {
           password: req.body.password
         });
         const token = await loggingin.login();
-        res.json({
+        res.status(200).json({
           status: 200,
           message: "successfully login",
           token,
         })
         break;
       case 'logout':
-        const loggingout = new Logout<string>(req.body.token);
+        const loggingout = new Logout<string>((req.headers.userauth) as string);
         await loggingout.logout();
-        res.json({
+        res.status(200).json({
           status: 200,
           message: 'logout successfully'
         })
         break;
       case 'update':
-        const update = new Update<string, RecentRead>(req.body.token, {
+        const update = new Update<string, RecentRead>((req.headers.userauth) as string, {
           nomor: req.body.nomor,
           nama: req.body.nama,
           nama_latin: req.body.nama_latin,
           ayat: req.body.ayat
         });
         await update.update();
-        res.json({
+        res.status(200).json({
           status: 200,
           message: 'update successfully'
         })
