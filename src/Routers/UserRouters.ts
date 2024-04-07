@@ -63,42 +63,48 @@ UserRouter.put('/user/:options', async(req: Request, res: Response) => {
           password: req.body.password
         });
         const token = await loggingin.login();
-        res.status(200).cookie("USER_AUTH", token, {
-          httpOnly: false,
-          secure: true,
-          maxAge: 1000*60*60*24*30,
-          expires: new Date(Date.now() + 1000*60*60*24*20)
-        }).json({
-          status: 200,
-          message: "successfully login",
-          token
-        })
+        if(token) {
+          res.status(200).cookie("USER_AUTH", token, {
+            httpOnly: false,
+            secure: true,
+            maxAge: 1000*60*60*24*30,
+            expires: new Date(Date.now() + 1000*60*60*24*20)
+          }).json({
+            status: 200,
+            message: "successfully login",
+            token
+          });
+        }
         break;
       case 'logout':
-        const loggingout = new Logout<string>((req.headers.userauth) as string);
-        await loggingout.logout();
-        res.status(200).cookie("USER_AUTH", req.cookies.USER_AUTH, {
-          httpOnly: false,
-          secure: true,
-          maxAge: 100,
-          expires: new Date(Date.now() + 10)
-        }).json({
-          status: 200,
-          message: 'logout successfully'
-        })
+        if(req.cookies.USER_AUTH) {
+          const loggingout = new Logout<string>((req.cookies.USER_AUTH) as string);
+          await loggingout.logout();
+          res.status(200).cookie("USER_AUTH", req.cookies.USER_AUTH, {
+            httpOnly: false,
+            secure: true,
+            maxAge: 100,
+            expires: new Date(Date.now() + 10)
+          }).json({
+            status: 200,
+            message: 'logout successfully'
+          });
+        }
         break;
       case 'update':
-        const update = new Update<string, RecentRead>((req.headers.userauth) as string, {
-          nomor: req.body.nomor,
-          nama: req.body.nama,
-          nama_latin: req.body.nama_latin,
-          ayat: req.body.ayat
-        });
-        await update.update();
-        res.status(200).json({
-          status: 200,
-          message: 'update successfully'
-        })
+        if(req.cookies.USER_AUTH) {
+          const update = new Update<string, RecentRead>((req.cookies.USER_AUTH) as string, {
+            nomor: req.body.nomor,
+            nama: req.body.nama,
+            nama_latin: req.body.nama_latin,
+            ayat: req.body.ayat
+          });
+          await update.update();
+          res.status(200).json({
+            status: 200,
+            message: 'update successfully'
+          });
+        }
         break;
     }
   } catch(error) {
