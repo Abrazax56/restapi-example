@@ -66,7 +66,8 @@ UserRouter.put('/user/:options', async (req, res) => {
                     expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 20)
                 }).json({
                     status: 200,
-                    message: "successfully login"
+                    message: "successfully login",
+                    token
                 });
                 break;
             case 'logout':
