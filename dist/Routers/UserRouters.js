@@ -59,15 +59,26 @@ UserRouter.put('/user/:options', async (req, res) => {
                     password: req.body.password
                 });
                 const token = await loggingin.login();
+                res.cookie("USER_AUTH", token, {
+                    httpOnly: false,
+                    secure: true,
+                    maxAge: 1000 * 60 * 60 * 24 * 30,
+                    expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 20)
+                });
                 res.status(200).json({
                     status: 200,
-                    message: "successfully login",
-                    token,
+                    message: "successfully login"
                 });
                 break;
             case 'logout':
                 const loggingout = new Logout((req.headers.userauth));
                 await loggingout.logout();
+                res.cookie("USER_AUTH", req.cookies.USER_AUTH, {
+                    httpOnly: false,
+                    secure: true,
+                    maxAge: 100,
+                    expires: new Date(Date.now() + 10)
+                });
                 res.status(200).json({
                     status: 200,
                     message: 'logout successfully'

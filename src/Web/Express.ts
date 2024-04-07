@@ -1,5 +1,6 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import jwt, { Secret } from 'jsonwebtoken';
 import 'dotenv/config';
 import { UserRouter } from '.././Routers/UserRouters';
@@ -17,9 +18,11 @@ const allowedOrigins: Array<string> = [
   'http://localhost:5173'
 ];
 const options: cors.CorsOptions = {
-  origin: allowedOrigins
+  origin: allowedOrigins,
+  credentials: true
 };
 web.use(cors(options));
+web.use(cookieParser());
 web.use(express.json());
 web.use(express.urlencoded());
 

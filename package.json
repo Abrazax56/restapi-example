@@ -17,6 +17,7 @@
     "@babel/preset-env": "latest",
     "@babel/preset-typescript": "latest",
     "@jest/globals": "latest",
+    "@types/cookie-parser": "latest",
     "@types/cors": "latest",
     "@types/express": "latest",
     "@types/jest": "latest",
@@ -28,6 +29,7 @@
     "typescript": "latest"
   },
   "dependencies": {
+    "cookie-parser": "latest",
     "cors": "latest",
     "dotenv": "latest",
     "express": "latest",

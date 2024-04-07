@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import 'dotenv/config';
 import { UserRouter } from '.././Routers/UserRouters';
 import { QuranRouter } from '.././Routers/QuranRouters';
@@ -14,9 +15,11 @@ const allowedOrigins = [
     'http://localhost:5173'
 ];
 const options = {
-    origin: allowedOrigins
+    origin: allowedOrigins,
+    credentials: true
 };
 web.use(cors(options));
+web.use(cookieParser());
 web.use(express.json());
 web.use(express.urlencoded());
 web.use((req, res, next) => {
