@@ -8,7 +8,7 @@ import { QuranRouter } from '.././Routers/QuranRouters';
 import { User } from '.././Types/Users';
 
 export const web: Application = express();
-const allowedOrigins: Array<string> = [
+export const allowedOrigins: Array<string> = [
   'http://localhost:3000',
   'http://localhost:8080',
   'https://alquranqu.vercel.app',

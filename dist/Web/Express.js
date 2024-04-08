@@ -5,7 +5,7 @@ import 'dotenv/config';
 import { UserRouter } from '.././Routers/UserRouters';
 import { QuranRouter } from '.././Routers/QuranRouters';
 export const web = express();
-const allowedOrigins = [
+export const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:8080',
     'https://alquranqu.vercel.app',

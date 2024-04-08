@@ -1,4 +1,5 @@
 import express from 'express';
+import { allowedOrigins } from '.././Web/Express';
 import { GetAllUsers } from '.././Api/Users/GetAllUsers';
 import { Register } from '.././Api/Users/Register';
 import { Delete } from '.././Api/Users/Delete';
@@ -66,7 +67,10 @@ UserRouter.put('/user/:options', async (req, res) => {
                     password: req.body.password
                 });
                 const token = await loggingin.login();
-                if (token) {
+                const origins = (req.headers.origin);
+                if (token && allowedOrigins.indexOf(origins) >= 0) {
+                    res.setHeader("Access-Control-Allow-Origin", origins);
+                    res.setHeader("Access-Control-Allow-Credentials", "true");
                     return res.status(200).cookie("USER_AUTH", token, {
                         httpOnly: false,
                         secure: true,
