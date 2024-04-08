@@ -42,13 +42,16 @@ UserRouter.route('/user')
 
 .delete(async(req: Request, res: Response) => {
   try {
-    const userToken: string = (req.headers.userauth) as string;
-    const deleteUser = new Delete<string>(userToken);
-    await deleteUser.deleteUser();
-    res.status(200).json({
-      status: 200,
-      message: 'user successfully deleted'
-    });
+    if(req.cookies.USER_AUTH) {
+      const userToken: string = (req.cookies.USER_AUTH) as string;
+      const deleteUser = new Delete<string>(userToken);
+      await deleteUser.deleteUser();
+      return res.status(200).json({
+        status: 200,
+        message: 'user successfully deleted'
+      });
+    }
+    res.status(401).json({message: 'invalid token'});
   } catch (error) {
     res.status(500).json({error});
   }
@@ -64,7 +67,7 @@ UserRouter.put('/user/:options', async(req: Request, res: Response) => {
         });
         const token = await loggingin.login();
         if(token) {
-          res.status(200).cookie("USER_AUTH", token, {
+          return res.status(200).cookie("USER_AUTH", token, {
             httpOnly: false,
             secure: true,
             maxAge: 1000*60*60*24*30,
@@ -75,12 +78,13 @@ UserRouter.put('/user/:options', async(req: Request, res: Response) => {
             token
           });
         }
+        res.status(401).json({message: "invalid token"})
         break;
       case 'logout':
         if(req.cookies.USER_AUTH) {
           const loggingout = new Logout<string>((req.cookies.USER_AUTH) as string);
           await loggingout.logout();
-          res.status(200).cookie("USER_AUTH", req.cookies.USER_AUTH, {
+          return res.status(200).cookie("USER_AUTH", req.cookies.USER_AUTH, {
             httpOnly: false,
             secure: true,
             maxAge: 100,
@@ -90,6 +94,7 @@ UserRouter.put('/user/:options', async(req: Request, res: Response) => {
             message: 'logout successfully'
           });
         }
+        res.status(401).json({message: "invalid token"})
         break;
       case 'update':
         if(req.cookies.USER_AUTH) {
@@ -100,11 +105,12 @@ UserRouter.put('/user/:options', async(req: Request, res: Response) => {
             ayat: req.body.ayat
           });
           await update.update();
-          res.status(200).json({
+          return res.status(200).json({
             status: 200,
             message: 'update successfully'
           });
         }
+        res.status(401).json({message: "invalid token"})
         break;
     }
   } catch(error) {

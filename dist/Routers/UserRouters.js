@@ -38,13 +38,16 @@ UserRouter.route('/user')
 })
     .delete(async (req, res) => {
     try {
-        const userToken = (req.headers.userauth);
-        const deleteUser = new Delete(userToken);
-        await deleteUser.deleteUser();
-        res.status(200).json({
-            status: 200,
-            message: 'user successfully deleted'
-        });
+        if (req.cookies.USER_AUTH) {
+            const userToken = (req.cookies.USER_AUTH);
+            const deleteUser = new Delete(userToken);
+            await deleteUser.deleteUser();
+            return res.status(200).json({
+                status: 200,
+                message: 'user successfully deleted'
+            });
+        }
+        res.status(401).json({ message: 'invalid token' });
     }
     catch (error) {
         res.status(500).json({ error });
@@ -60,7 +63,7 @@ UserRouter.put('/user/:options', async (req, res) => {
                 });
                 const token = await loggingin.login();
                 if (token) {
-                    res.status(200).cookie("USER_AUTH", token, {
+                    return res.status(200).cookie("USER_AUTH", token, {
                         httpOnly: false,
                         secure: true,
                         maxAge: 1000 * 60 * 60 * 24 * 30,
@@ -71,12 +74,13 @@ UserRouter.put('/user/:options', async (req, res) => {
                         token
                     });
                 }
+                res.status(401).json({ message: "invalid token" });
                 break;
             case 'logout':
                 if (req.cookies.USER_AUTH) {
                     const loggingout = new Logout((req.cookies.USER_AUTH));
                     await loggingout.logout();
-                    res.status(200).cookie("USER_AUTH", req.cookies.USER_AUTH, {
+                    return res.status(200).cookie("USER_AUTH", req.cookies.USER_AUTH, {
                         httpOnly: false,
                         secure: true,
                         maxAge: 100,
@@ -86,6 +90,7 @@ UserRouter.put('/user/:options', async (req, res) => {
                         message: 'logout successfully'
                     });
                 }
+                res.status(401).json({ message: "invalid token" });
                 break;
             case 'update':
                 if (req.cookies.USER_AUTH) {
@@ -96,11 +101,12 @@ UserRouter.put('/user/:options', async (req, res) => {
                         ayat: req.body.ayat
                     });
                     await update.update();
-                    res.status(200).json({
+                    return res.status(200).json({
                         status: 200,
                         message: 'update successfully'
                     });
                 }
+                res.status(401).json({ message: "invalid token" });
                 break;
         }
     }
