@@ -71,7 +71,8 @@ UserRouter.put('/user/:options', async (req, res) => {
                         httpOnly: false,
                         secure: true,
                         maxAge: 1000 * 60 * 60 * 24 * 30,
-                        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 20)
+                        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 20),
+                        sameSite: 'none'
                     }).json({
                         status: 200,
                         message: "successfully login",
