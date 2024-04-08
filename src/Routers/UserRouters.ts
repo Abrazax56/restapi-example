@@ -30,11 +30,14 @@ UserRouter.route('/user')
       recentread: false
     };
     const register = new Register<User>(userData);
-    await register.register();
-    res.status(200).json({
-      status: 200,
-      message: "register successfully"
-    });
+    const statuss: number = await register.register() as number;
+    if(statuss === 200) {
+      res.status(200).json({
+        message: "register successfully"
+      });
+    } else {
+      res.status(statuss).json({message: 'username is already exist'});
+    }
   } catch (error) {
     res.status(500).json({error});
   }

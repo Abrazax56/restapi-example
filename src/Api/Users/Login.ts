@@ -12,7 +12,7 @@ export class Login<Type extends User> {
     try {
       await UserDB.CLIENT.connect();
       const user: User | null = await UserDB.COLLECTION.findOne({username: this.userData.username});
-      if(user !== null) {
+      if(user !== null && user.password === this.userData.password) {
         await UserDB.COLLECTION.updateOne(
           {
             username: this.userData.username
