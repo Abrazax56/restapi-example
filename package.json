@@ -34,7 +34,8 @@
     "dotenv": "latest",
     "express": "latest",
     "jsonwebtoken": "latest",
-    "mongodb": "latest"
+    "mongodb": "latest",
+    "zod": "latest"
   },
   "author": "Ahmad Beni Rusli",
   "license": "MIT"

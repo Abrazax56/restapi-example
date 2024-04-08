@@ -28,7 +28,7 @@ UserRouter.route('/user')
       password: req.body.password,
       loggingin: false,
       recentread: false
-    };
+    }
     const register = new Register<User>(userData);
     const statuss: number = await register.register() as number;
     if(statuss === 200) {
