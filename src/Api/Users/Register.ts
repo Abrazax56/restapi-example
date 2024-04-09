@@ -23,7 +23,8 @@ export class Register<Type extends User> {
         throw new Error(error.message);
         return 500;
       } else if(error instanceof ZodError) {
-        throw new Error(error.message);
+        throw new Error("invalid input query");
+        return 500;
       }
     } finally {
       await UserDB.CLIENT.close();
