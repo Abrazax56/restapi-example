@@ -3,24 +3,8 @@ import { ListSurah } from '.././Api/Quran/ListSurah';
 import { DetailSurah } from '.././Api/Quran/DetailSurah';
 export const QuranRouter = express.Router();
 QuranRouter.get('/surah', async (req, res) => {
-    try {
-        const getList = await ListSurah.getList();
-        res.status(200).json(getList);
-    }
-    catch (error) {
-        res.status(500).json(error);
-    }
+    await ListSurah.getList(req, res);
 });
 QuranRouter.get('/surah/:id', async (req, res) => {
-    try {
-        const nomor = Number(req.params.id);
-        if (nomor > 0 && nomor <= 114) {
-            const getDetail = await DetailSurah.getDetail(nomor);
-            return res.status(200).json(getDetail);
-        }
-        res.json({ status: null, message: "invalid params" });
-    }
-    catch (error) {
-        res.status(500).json(error);
-    }
+    await DetailSurah.getDetail(req, res);
 });

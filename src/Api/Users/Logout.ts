@@ -40,7 +40,7 @@ export class Logout<Req extends Request, Res extends Response> {
             }
         } catch (error) {
             if(error instanceof Error) {
-                this.res.status(500).json({error: error.message});
+                this.res.status(504).json({error: error.message});
             }
         } finally {
             await UserDB.CLIENT.close();

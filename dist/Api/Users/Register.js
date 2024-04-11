@@ -30,7 +30,7 @@ export class Register {
         }
         catch (error) {
             if (error instanceof Error || error instanceof ZodError) {
-                this.res.status(500).json({ error: error.message });
+                this.res.status(504).json({ error: error.message });
             }
         }
         finally {

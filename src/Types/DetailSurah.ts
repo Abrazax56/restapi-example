@@ -1,39 +1,39 @@
 import { ObjectId } from 'mongodb';
 
 export interface DetailAyat {
-  id?: number;
-  surah?: number;
-  nomor?: number;
-  ar?: string;
-  tr?: string;
-  idn?: string;
+    id?: number;
+    surah?: number;
+    nomor?: number;
+    ar?: string;
+    tr?: string;
+    idn?: string;
 }
 export interface Ayat {
-  [index: number]: DetailAyat;
+    [index: number]: DetailAyat;
 }
 export interface SurahBeforeAfter {
-  id?: number;
-  nomor?: number;
-  nama?: string;
-  nama_latin?: string;
-  jumlah_ayat?: number;
-  tempat_turun?: string;
-  arti?: string;
-  deskripsi?: string;
-  audio?: string;
+    id?: number;
+    nomor?: number;
+    nama?: string;
+    nama_latin?: string;
+    jumlah_ayat?: number;
+    tempat_turun?: string;
+    arti?: string;
+    deskripsi?: string;
+    audio?: string;
 }
 export interface DetailSurahs {
-  _id?: ObjectId;
-  status?: boolean;
-  nomor?: number;
-  nama?: string;
-  nama_latin?: string;
-  jumlah_ayat?: number;
-  tempat_turun?: string;
-  arti?: string;
-  deskripsi?: string;
-  audio?: string;
-  ayat?: Ayat;
-  surat_selanjutnya?: SurahBeforeAfter | boolean;
-  surat_sebelumnya?: SurahBeforeAfter | boolean;
+    _id?: ObjectId;
+    status?: boolean;
+    nomor?: number;
+    nama?: string;
+    nama_latin?: string;
+    jumlah_ayat?: number;
+    tempat_turun?: string;
+    arti?: string;
+    deskripsi?: string;
+    audio?: string;
+    ayat?: Ayat;
+    surat_selanjutnya?: SurahBeforeAfter | boolean;
+    surat_sebelumnya?: SurahBeforeAfter | boolean;
 }

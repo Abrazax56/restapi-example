@@ -37,7 +37,7 @@ export class Logout {
         }
         catch (error) {
             if (error instanceof Error) {
-                this.res.status(500).json({ error: error.message });
+                this.res.status(504).json({ error: error.message });
             }
         }
         finally {

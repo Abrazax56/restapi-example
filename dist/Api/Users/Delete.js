@@ -20,7 +20,7 @@ export class Delete {
         }
         catch (error) {
             if (error instanceof Error || error instanceof jwt.TokenExpiredError) {
-                this.res.status(500).json({ error: error.message });
+                this.res.status(504).json({ error: error.message });
             }
         }
         finally {

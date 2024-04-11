@@ -37,7 +37,7 @@ web.use((req, res, next) => {
 });
 web.set('json spaces', 2);
 web.get('/', (req, res) => {
-    res.json({ status: true });
+    res.status(200).json({ status: true });
 });
 web.use(UserRouter);
 web.use(QuranRouter);

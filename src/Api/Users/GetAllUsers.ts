@@ -11,10 +11,10 @@ export class GetAllUsers<Req extends Request, Res extends Response> {
         try {
             await UserDB.CLIENT.connect();
             const users: AllUser = await UserDB.COLLECTION.find().toArray() as AllUser;
-            this.res.json(users);
+            this.res.status(200).json(users);
         } catch (error) {
             if(error instanceof Error) {
-                this.res.json({error: error.message});
+                this.res.status(504).json({error: error.message});
             }
         } finally {
             await UserDB.CLIENT.close();

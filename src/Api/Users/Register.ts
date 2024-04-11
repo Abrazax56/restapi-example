@@ -29,7 +29,7 @@ export class Register<Req extends Request, Res extends Response> {
             }
         } catch (error) {
             if(error instanceof Error || error instanceof ZodError) {
-                this.res.status(500).json({error: error.message});
+                this.res.status(504).json({error: error.message});
             }
         } finally {
             await UserDB.CLIENT.close();
