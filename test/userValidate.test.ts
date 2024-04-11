@@ -39,12 +39,13 @@ describe('Username Validate', () => {
       loggingin: z.boolean(),
       recentread: z.boolean()
     });
-    const userValidation: User = userSchema.parse(userData);
+    
     try {
+      const userValidation: User = userSchema.parse(userData);
       console.info(userValidation);
     } catch(error) {
       if(error instanceof ZodError) {
-        console.info(error);
+        console.info(error.message);
       }
     }
   });

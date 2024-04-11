@@ -14,7 +14,7 @@ export class GetAllUsers<Req extends Request, Res extends Response> {
             this.res.json(users);
         } catch (error) {
             if(error instanceof Error) {
-                this.res.json({error: error});
+                this.res.json({error: error.message});
             }
         } finally {
             await UserDB.CLIENT.close();

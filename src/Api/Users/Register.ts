@@ -20,14 +20,16 @@ export class Register<Req extends Request, Res extends Response> {
                 recentread: false
             }
             const user: User | null = await UserDB.COLLECTION.findOne({username: userData.username});
-            if(user === null) {
-                const userValidation: User = userSchema.parse(userData);
+            const userValidation: User = userSchema.parse(userData);
+            if(user !== null) {
+                throw new Error('username is already exist!');
+            } else if(user === null && userValidation === userData) {
                 await UserDB.COLLECTION.insertOne(userValidation);
                 this.res.status(200).json({message: "Register successfully!"});
             }
         } catch (error) {
             if(error instanceof Error || error instanceof ZodError) {
-                this.res.status(500).json({error: error});
+                this.res.status(500).json({error: error.message});
             }
         } finally {
             await UserDB.CLIENT.close();

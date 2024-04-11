@@ -14,7 +14,7 @@ export class GetAllUsers {
         }
         catch (error) {
             if (error instanceof Error) {
-                this.res.json({ error: error });
+                this.res.json({ error: error.message });
             }
         }
         finally {

@@ -47,11 +47,17 @@ export class Login {
                         token
                     });
                 }
+                else {
+                    throw new Error('origin or token is invalid!');
+                }
+            }
+            else {
+                throw new Error('username or password is incorrect!');
             }
         }
         catch (error) {
             if (error instanceof Error) {
-                this.res.status(500).json({ error: error });
+                this.res.status(500).json({ error: error.message });
             }
         }
         finally {

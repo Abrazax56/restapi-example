@@ -34,7 +34,7 @@ export class Login<Req extends Request, Res extends Response> {
                     name: user.name,
                     username: user.username,
                     password: user.password
-                }
+                };
                 const token: string = jwt.sign(userTokenData as object, (process.env.SECRET) as Secret, {expiresIn: '30d'});
                 const origins: string = (this.req.headers.origin) as string;
                 if(token && allowedOrigins.indexOf(origins) >= 0) {
@@ -51,11 +51,15 @@ export class Login<Req extends Request, Res extends Response> {
                         message: "successfully login",
                         token
                     });
+                } else {
+                    throw new Error('origin or token is invalid!');
                 }
+            } else {
+                throw new Error('username or password is incorrect!');
             }
         } catch (error) {
             if(error instanceof Error) {
-                this.res.status(500).json({error: error});
+                this.res.status(500).json({error: error.message});
             }
         } finally {
             await UserDB.CLIENT.close();

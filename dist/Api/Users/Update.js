@@ -32,10 +32,13 @@ export class Update {
                     message: 'update successfully'
                 });
             }
+            else {
+                throw new Error('user not be found!');
+            }
         }
         catch (error) {
             if (error instanceof Error) {
-                this.res.status(500).json({ error: error });
+                this.res.status(500).json({ error: error.message });
             }
         }
         finally {

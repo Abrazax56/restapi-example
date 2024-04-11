@@ -21,7 +21,7 @@ export class Delete<Req extends Request, Res extends Response> {
             });
         } catch (error) {
             if(error instanceof Error || error instanceof jwt.TokenExpiredError) {
-                this.res.status(500).json({ error: error });
+                this.res.status(500).json({ error: error.message });
             }
         } finally {
             await UserDB.CLIENT.close();

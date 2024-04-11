@@ -21,7 +21,7 @@ export class Update<Req extends Request, Res extends Response> {
                     nama: this.req.body.nama,
                     nama_latin: this.req.body.nama_latin,
                     ayat: this.req.body.ayat
-                }
+                };
                 await UserDB.COLLECTION.updateOne(
                     {
                         username: userData.username
@@ -36,10 +36,12 @@ export class Update<Req extends Request, Res extends Response> {
                     status: 200,
                     message: 'update successfully'
                 });
+            } else {
+                throw new Error('user not be found!');
             }
         } catch (error) {
             if(error instanceof Error) {
-                this.res.status(500).json({ error: error });
+                this.res.status(500).json({ error: error.message });
             }
         } finally {
             await UserDB.CLIENT.close();
