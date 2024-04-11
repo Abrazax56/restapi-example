@@ -1,16 +1,21 @@
 import { UserDB } from '../.././Database/UserDB';
 export class GetAllUsers {
-    static async USERS() {
+    req;
+    res;
+    constructor(req, res) {
+        this.req = req;
+        this.res = res;
+    }
+    async getAllUser() {
         try {
             await UserDB.CLIENT.connect();
             const users = await UserDB.COLLECTION.find().toArray();
-            return users;
+            this.res.json(users);
         }
         catch (error) {
             if (error instanceof Error) {
-                throw new Error(error.message);
+                this.res.json({ error: error });
             }
-            return error;
         }
         finally {
             await UserDB.CLIENT.close();

@@ -1,33 +1,36 @@
+import { Request, Response } from 'express';
 import {ZodError} from "zod";
 import { userSchema } from "../.././Validation/UserSchema";
 import { UserDB } from '../.././Database/UserDB';
 import { User } from '../.././Types/Users';
 
-export class Register<Type extends User> {
-  constructor(
-    private userData: Type
-  ) {}
-  async register(): Promise<number | undefined>{
-    try {
-      await UserDB.CLIENT.connect();
-      const user: User | null = await UserDB.COLLECTION.findOne({username: this.userData.username});
-      const userValidation: User = userSchema.parse(this.userData);
-      if(user === null) {
-        await UserDB.COLLECTION.insertOne(userValidation);
-        return 200;
-      } else {
-        return 500;
-      }
-    } catch (error) {
-      if(error instanceof Error) {
-        throw new Error(error.message);
-        return 500;
-      } else if(error instanceof ZodError) {
-        throw new Error("invalid input query");
-        return 500;
-      }
-    } finally {
-      await UserDB.CLIENT.close();
+export class Register<Req extends Request, Res extends Response> {
+    constructor(
+        private req: Req,
+        private res: Res,
+    ) {}
+    async register(): Promise<void>{
+        try {
+            await UserDB.CLIENT.connect();
+            const userData: User = {
+                name: this.req.body.name,
+                username: this.req.body.username,
+                password: this.req.body.password,
+                loggingin: false,
+                recentread: false
+            }
+            const user: User | null = await UserDB.COLLECTION.findOne({username: userData.username});
+            if(user === null) {
+                const userValidation: User = userSchema.parse(userData);
+                await UserDB.COLLECTION.insertOne(userValidation);
+                this.res.status(200).json({message: "Register successfully!"});
+            }
+        } catch (error) {
+            if(error instanceof Error || error instanceof ZodError) {
+                this.res.status(500).json({error: error});
+            }
+        } finally {
+            await UserDB.CLIENT.close();
+        }
     }
-  }
 }
