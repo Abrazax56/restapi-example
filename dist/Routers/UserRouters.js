@@ -1,37 +1,26 @@
 import express from 'express';
-import { GetAllUsers } from '.././Api/Users/GetAllUsers';
-import { Register } from '.././Api/Users/Register';
-import { Delete } from '.././Api/Users/Delete';
-import { Login } from '.././Api/Users/Login';
-import { Logout } from '.././Api/Users/Logout';
-import { Update } from '.././Api/Users/Update';
+import { Users } from '.././Api/User';
 export const UserRouter = express.Router();
 UserRouter.get('/users', async (req, res) => {
-    const allUser = new GetAllUsers(req, res);
-    await allUser.getAllUser();
+    await Users.allUser(req, res);
 });
 UserRouter.route('/user')
     .post(async (req, res) => {
-    const register = new Register(req, res);
-    await register.register();
+    await Users.register(req, res);
 })
     .delete(async (req, res) => {
-    const deleteUser = new Delete(req, res);
-    await deleteUser.deleteUser();
+    await Users.deletes(req, res);
 });
 UserRouter.put('/user/:options', async (req, res) => {
     switch (req.params.options) {
         case 'login':
-            const loggingin = new Login(req, res);
-            await loggingin.login();
+            await Users.login(req, res);
             break;
         case 'logout':
-            const loggingout = new Logout(req, res);
-            await loggingout.logout();
+            await Users.logout(req, res);
             break;
         case 'update':
-            const update = new Update(req, res);
-            await update.update();
+            await Users.update(req, res);
             break;
         default:
             res.status(500).json({ error: 'invalid params!' });
