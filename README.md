@@ -30,7 +30,6 @@ npx tsc --init
 ###### 4. kompilasi kode Typescript
 ```bash
 npx tsc
-//jika ingin melihat kompilasi langsung
 npx tsc --watch
 ```
 ###### 5. jalankan kode
