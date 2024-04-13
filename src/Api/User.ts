@@ -6,6 +6,7 @@ import { allowedOrigins } from '.././Web/Express';
 import { UserDB } from '.././Database/UserDB';
 import { userSchema } from ".././Validation/UserSchema";
 import { AllUser, User, RecentRead } from '.././Types/Users';
+import { HandleError } from '.././Error/ErrorHandling';
 import 'dotenv/config';
 
 export class Users {
@@ -16,7 +17,7 @@ export class Users {
             res.status(200).json(users);
         } catch (error) {
             if(error instanceof Error) {
-                res.status(504).json({error: error.message});
+                res.status(500).json({error: error.message});
             }
         } finally {
             await UserDB.CLIENT.close();
@@ -36,14 +37,16 @@ export class Users {
             const user: User | null = await UserDB.COLLECTION.findOne({username: userData.username});
             const userValidation: User = userSchema.parse(userData);
             if(user !== null) {
-                throw new Error('username is already exist!');
+                throw new HandleError<string, number>('username is already exist!', 422);
             } else if(user === null && userValidation === userData) {
                 await UserDB.COLLECTION.insertOne(userValidation);
                 res.status(200).json({message: "Register successfully!"});
             }
         } catch (error) {
-            if(error instanceof Error || error instanceof ZodError) {
-                res.status(504).json({error: error.message});
+            if(error instanceof HandleError) {
+                res.status(error.codeStatus).json({error: error.message});
+            } else if(error instanceof ZodError) {
+                res.status(422).json({error: 'invalid input!'})
             }
         } finally {
             await UserDB.CLIENT.close();
@@ -91,14 +94,14 @@ export class Users {
                         token
                     });
                 } else {
-                    throw new Error('origin or token is invalid!');
+                    throw new HandleError<string, number>('origin or token is invalid!', 422);
                 }
             } else {
-                throw new Error('username or password is incorrect!');
+                throw new HandleError<string, number>('username or password is incorrect!', 422);
             }
         } catch (error) {
-            if(error instanceof Error) {
-                res.status(504).json({error: error.message});
+            if(error instanceof HandleError) {
+                res.status(error.codeStatus).json({error: error.message});
             }
         } finally {
             await UserDB.CLIENT.close();
@@ -132,11 +135,11 @@ export class Users {
                     message: 'update successfully'
                 });
             } else {
-                throw new Error('user not be found!');
+                throw new HandleError<string, number>('user not found!', 404);
             }
         } catch (error) {
-            if(error instanceof Error) {
-                res.status(504).json({ error: error.message });
+            if(error instanceof HandleError) {
+                res.status(error.codeStatus).json({ error: error.message });
             }
         } finally {
             await UserDB.CLIENT.close();
@@ -169,11 +172,11 @@ export class Users {
                     message: 'logout successfully'
                 });
             } else {
-                throw new Error('user not be found!');
+                throw new HandleError<string, number>('user not found!', 404);
             }
         } catch (error) {
-            if(error instanceof Error) {
-                res.status(504).json({error: error.message});
+            if(error instanceof HandleError) {
+                res.status(error.codeStatus).json({error: error.message});
             }
         } finally {
             await UserDB.CLIENT.close();
@@ -191,7 +194,7 @@ export class Users {
             });
         } catch (error) {
             if(error instanceof Error || error instanceof jwt.TokenExpiredError) {
-                res.status(504).json({ error: error.message });
+                res.status(500).json({ error: error.message });
             }
         } finally {
             await UserDB.CLIENT.close();

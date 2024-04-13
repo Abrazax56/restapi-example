@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { allowedOrigins } from '.././Web/Express';
 import { UserDB } from '.././Database/UserDB';
 import { userSchema } from ".././Validation/UserSchema";
+import { HandleError } from '.././Error/ErrorHandling';
 import 'dotenv/config';
 export class Users {
     static async allUser(req, res) {
@@ -13,7 +14,7 @@ export class Users {
         }
         catch (error) {
             if (error instanceof Error) {
-                res.status(504).json({ error: error.message });
+                res.status(500).json({ error: error.message });
             }
         }
         finally {
@@ -33,7 +34,7 @@ export class Users {
             const user = await UserDB.COLLECTION.findOne({ username: userData.username });
             const userValidation = userSchema.parse(userData);
             if (user !== null) {
-                throw new Error('username is already exist!');
+                throw new HandleError('username is already exist!', 422);
             }
             else if (user === null && userValidation === userData) {
                 await UserDB.COLLECTION.insertOne(userValidation);
@@ -41,8 +42,11 @@ export class Users {
             }
         }
         catch (error) {
-            if (error instanceof Error || error instanceof ZodError) {
-                res.status(504).json({ error: error.message });
+            if (error instanceof HandleError) {
+                res.status(error.codeStatus).json({ error: error.message });
+            }
+            else if (error instanceof ZodError) {
+                res.status(422).json({ error: 'invalid input!' });
             }
         }
         finally {
@@ -88,16 +92,16 @@ export class Users {
                     });
                 }
                 else {
-                    throw new Error('origin or token is invalid!');
+                    throw new HandleError('origin or token is invalid!', 422);
                 }
             }
             else {
-                throw new Error('username or password is incorrect!');
+                throw new HandleError('username or password is incorrect!', 422);
             }
         }
         catch (error) {
-            if (error instanceof Error) {
-                res.status(504).json({ error: error.message });
+            if (error instanceof HandleError) {
+                res.status(error.codeStatus).json({ error: error.message });
             }
         }
         finally {
@@ -129,12 +133,12 @@ export class Users {
                 });
             }
             else {
-                throw new Error('user not be found!');
+                throw new HandleError('user not found!', 404);
             }
         }
         catch (error) {
-            if (error instanceof Error) {
-                res.status(504).json({ error: error.message });
+            if (error instanceof HandleError) {
+                res.status(error.codeStatus).json({ error: error.message });
             }
         }
         finally {
@@ -165,12 +169,12 @@ export class Users {
                 });
             }
             else {
-                throw new Error('user not be found!');
+                throw new HandleError('user not found!', 404);
             }
         }
         catch (error) {
-            if (error instanceof Error) {
-                res.status(504).json({ error: error.message });
+            if (error instanceof HandleError) {
+                res.status(error.codeStatus).json({ error: error.message });
             }
         }
         finally {
@@ -189,7 +193,7 @@ export class Users {
         }
         catch (error) {
             if (error instanceof Error || error instanceof jwt.TokenExpiredError) {
-                res.status(504).json({ error: error.message });
+                res.status(500).json({ error: error.message });
             }
         }
         finally {
