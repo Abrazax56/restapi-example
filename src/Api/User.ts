@@ -109,7 +109,7 @@ export class Users {
     static async update(req: Request, res: Response): Promise<void> {
         try {
             await UserDB.CLIENT.connect();
-            const userData: User = jwt.verify((req.headers.user_auth) as string, (process.env.SECRET) as Secret) as User;
+            const userData: User = jwt.verify((req.headers.userauth) as string, (process.env.SECRET) as Secret) as User;
             const user: User | null = await UserDB.COLLECTION.findOne({username: userData.username});
             if(user !== null && req.headers.user_auth) {
                 const recentRead: RecentRead = {
@@ -149,7 +149,7 @@ export class Users {
     static async logout(req: Request, res: Response): Promise<void> {
         try {
             await UserDB.CLIENT.connect();
-            const userData: User = jwt.verify((req.headers.user_auth) as string, (process.env.SECRET) as Secret) as User;
+            const userData: User = jwt.verify((req.headers.userauth) as string, (process.env.SECRET) as Secret) as User;
             const user: User | null = await UserDB.COLLECTION.findOne({username: userData.username});
             if(user !== null && req.headers.user_auth) {
                 await UserDB.COLLECTION.updateOne(
@@ -183,7 +183,7 @@ export class Users {
     static async deletes(req: Request, res: Response): Promise<void> {
         try {
             await UserDB.CLIENT.connect();
-            const userData: User = jwt.verify((req.headers.user_auth) as string, (process.env.SECRET) as Secret) as User;
+            const userData: User = jwt.verify((req.headers.userauth) as string, (process.env.SECRET) as Secret) as User;
             await UserDB.COLLECTION.deleteOne({username: userData.username});
             res.status(200).json({
                 status: 200,
