@@ -48,6 +48,9 @@ export class Users {
             else if (error instanceof ZodError) {
                 res.status(422).json({ error: 'invalid input!' });
             }
+            else {
+                res.status(500).json({ error: 'something went wrong!' });
+            }
         }
         finally {
             await UserDB.CLIENT.close();
@@ -79,13 +82,7 @@ export class Users {
                 if (token && allowedOrigins.indexOf(origins) >= 0) {
                     res.setHeader("Access-Control-Allow-Origin", origins);
                     res.setHeader("Access-Control-Allow-Credentials", "true");
-                    res.status(200).cookie("USER_AUTH", token, {
-                        httpOnly: false,
-                        secure: true,
-                        maxAge: 1000 * 60 * 60 * 24 * 30,
-                        expires: new Date(Date.now() + 1000 * 60 * 60 * 24 * 20),
-                        sameSite: 'none'
-                    }).json({
+                    res.status(200).json({
                         status: 200,
                         message: "successfully login",
                         token
@@ -103,6 +100,9 @@ export class Users {
             if (error instanceof HandleError) {
                 res.status(error.codeStatus).json({ error: error.message });
             }
+            else {
+                res.status(500).json({ error: 'something went wrong!' });
+            }
         }
         finally {
             await UserDB.CLIENT.close();
@@ -111,9 +111,9 @@ export class Users {
     static async update(req, res) {
         try {
             await UserDB.CLIENT.connect();
-            const userData = jwt.verify(req.cookies.USER_AUTH, (process.env.SECRET));
+            const userData = jwt.verify((req.headers.user_auth), (process.env.SECRET));
             const user = await UserDB.COLLECTION.findOne({ username: userData.username });
-            if (user !== null && req.cookies.USER_AUTH) {
+            if (user !== null && req.headers.user_auth) {
                 const recentRead = {
                     nomor: req.body.nomor,
                     nama: req.body.nama,
@@ -140,6 +140,9 @@ export class Users {
             if (error instanceof HandleError) {
                 res.status(error.codeStatus).json({ error: error.message });
             }
+            else {
+                res.status(500).json({ error: 'something went wrong!' });
+            }
         }
         finally {
             await UserDB.CLIENT.close();
@@ -148,9 +151,9 @@ export class Users {
     static async logout(req, res) {
         try {
             await UserDB.CLIENT.connect();
-            const userData = jwt.verify(req.cookies.USER_AUTH, (process.env.SECRET));
+            const userData = jwt.verify((req.headers.user_auth), (process.env.SECRET));
             const user = await UserDB.COLLECTION.findOne({ username: userData.username });
-            if (user !== null && req.cookies.USER_AUTH) {
+            if (user !== null && req.headers.user_auth) {
                 await UserDB.COLLECTION.updateOne({
                     username: userData.username
                 }, {
@@ -158,12 +161,7 @@ export class Users {
                         loggingin: false
                     }
                 });
-                res.status(200).cookie("USER_AUTH", req.cookies.USER_AUTH, {
-                    httpOnly: false,
-                    secure: true,
-                    maxAge: 100,
-                    expires: new Date(Date.now() + 10)
-                }).json({
+                res.status(200).json({
                     status: 200,
                     message: 'logout successfully'
                 });
@@ -176,6 +174,9 @@ export class Users {
             if (error instanceof HandleError) {
                 res.status(error.codeStatus).json({ error: error.message });
             }
+            else {
+                res.status(500).json({ error: 'something went wrong!' });
+            }
         }
         finally {
             await UserDB.CLIENT.close();
@@ -184,7 +185,7 @@ export class Users {
     static async deletes(req, res) {
         try {
             await UserDB.CLIENT.connect();
-            const userData = jwt.verify(req.cookies.USER_AUTH, (process.env.SECRET));
+            const userData = jwt.verify((req.headers.user_auth), (process.env.SECRET));
             await UserDB.COLLECTION.deleteOne({ username: userData.username });
             res.status(200).json({
                 status: 200,
