@@ -111,7 +111,7 @@ export class Users {
             await UserDB.CLIENT.connect();
             const userData: User = jwt.verify((req.headers.userauth) as string, (process.env.SECRET) as Secret) as User;
             const user: User | null = await UserDB.COLLECTION.findOne({username: userData.username});
-            if(user !== null && req.headers.user_auth) {
+            if(user !== null && req.headers.userauth) {
                 const recentRead: RecentRead = {
                     nomor: req.body.nomor,
                     nama: req.body.nama,
@@ -151,7 +151,7 @@ export class Users {
             await UserDB.CLIENT.connect();
             const userData: User = jwt.verify((req.headers.userauth) as string, (process.env.SECRET) as Secret) as User;
             const user: User | null = await UserDB.COLLECTION.findOne({username: userData.username});
-            if(user !== null && req.headers.user_auth) {
+            if(user !== null && req.headers.userauth) {
                 await UserDB.COLLECTION.updateOne(
                     {
                         username: userData.username
