@@ -38,7 +38,7 @@ export class Users {
             const userValidation: User = userSchema.parse(userData);
             if(user !== null) {
                 throw new HandleError<string, number>('username is already exist!', 422);
-            } else if(user === null && userValidation === userData) {
+            } else if(user === null && JSON.stringify(userValidation) === JSON.stringify(userData)) {
                 await UserDB.COLLECTION.insertOne(userValidation);
                 res.status(200).json({message: "Register successfully!"});
             }

@@ -36,7 +36,7 @@ export class Users {
             if (user !== null) {
                 throw new HandleError('username is already exist!', 422);
             }
-            else if (user === null && userValidation === userData) {
+            else if (user === null && JSON.stringify(userValidation) === JSON.stringify(userData)) {
                 await UserDB.COLLECTION.insertOne(userValidation);
                 res.status(200).json({ message: "Register successfully!" });
             }
@@ -113,7 +113,7 @@ export class Users {
             await UserDB.CLIENT.connect();
             const userData = jwt.verify((req.headers.userauth), (process.env.SECRET));
             const user = await UserDB.COLLECTION.findOne({ username: userData.username });
-            if (user !== null && req.headers.user_auth) {
+            if (user !== null && req.headers.userauth) {
                 const recentRead = {
                     nomor: req.body.nomor,
                     nama: req.body.nama,
@@ -153,7 +153,7 @@ export class Users {
             await UserDB.CLIENT.connect();
             const userData = jwt.verify((req.headers.userauth), (process.env.SECRET));
             const user = await UserDB.COLLECTION.findOne({ username: userData.username });
-            if (user !== null && req.headers.user_auth) {
+            if (user !== null && req.headers.userauth) {
                 await UserDB.COLLECTION.updateOne({
                     username: userData.username
                 }, {
