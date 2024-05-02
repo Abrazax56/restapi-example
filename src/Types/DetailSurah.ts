@@ -4,7 +4,7 @@ export interface DetailAyat {
     id?: number;
     surah?: number;
     nomor?: number;
-    ar?: string;
+    ar?: string | undefined;
     tr?: string;
     idn?: string;
 }
@@ -33,7 +33,21 @@ export interface DetailSurahs {
     arti?: string;
     deskripsi?: string;
     audio?: string;
-    ayat?: Ayat;
+    ayat?: Array<Ayat>;
     surat_selanjutnya?: SurahBeforeAfter | boolean;
     surat_sebelumnya?: SurahBeforeAfter | boolean;
+}
+
+export interface DetailAyats {
+    id?: number | string;
+    arabic?: string | undefined;
+}
+
+export interface Ayats {
+    [index: number]: DetailAyats
+}
+
+export interface Arabic {
+    id?: number | string;
+    ayat: Array<Ayats>;
 }
