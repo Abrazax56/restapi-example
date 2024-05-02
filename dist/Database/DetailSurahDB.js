@@ -4,5 +4,5 @@ const uri = (process.env.MONGO_CONNECT);
 const client = new MongoClient(uri);
 export class DetailSurahDB {
     static CLIENT = client;
-    static COLLECTION = client.db('quran').collection('surah');
+    static COLLECTION = client.db('quran').collection('surahs');
 }
