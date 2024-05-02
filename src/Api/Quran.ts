@@ -26,11 +26,6 @@ export class Quran {
             const nomor: number = Number(req.params.id);
             if(nomor > 0 && nomor <= 114) {
                 const data: DetailSurahs = await DetailSurahDB.COLLECTION.findOne({nomor}) as DetailSurahs;
-                const data2: Arabic = await DetailSurahDB.COLLECTION2.findOne({id: nomor}) as Arabic;
-                data2?.ayat?.forEach((item: Ayats, index: number) => {
-                    data.ayat[index].ar = item?.arabic;
-                    data.ayat = data.ayat;
-                })
                 res.status(200).json(data);
             } else {
                 throw new Error('Data not found!');

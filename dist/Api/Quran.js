@@ -23,11 +23,6 @@ export class Quran {
             const nomor = Number(req.params.id);
             if (nomor > 0 && nomor <= 114) {
                 const data = await DetailSurahDB.COLLECTION.findOne({ nomor });
-                const data2 = await DetailSurahDB.COLLECTION2.findOne({ id: nomor });
-                data2?.ayat?.forEach((item, index) => {
-                    data.ayat[index].ar = item?.arabic;
-                    data.ayat = data.ayat;
-                });
                 res.status(200).json(data);
             }
             else {
