@@ -5,7 +5,7 @@
     "module": "ESNext",
     "target": "ESNext",
     "moduleResolution": "node",
-    //"types": ["bun-types"],
+    "types": ["bun-types"],
     "outDir": "dist/",
     "esModuleInterop": true,
     "allowJs": true,
