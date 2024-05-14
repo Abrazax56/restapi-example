@@ -9,7 +9,7 @@ export const allowedOrigins = [
     'http://localhost:3000',
     'http://localhost:8080',
     'https://alquranqu.vercel.app',
-    'https://alquranqu.my.id',
+    'https://alquran-kareem.my.id',
     'https://reqbin.com',
     'http://localhost:8158',
     'http://localhost:5173'
